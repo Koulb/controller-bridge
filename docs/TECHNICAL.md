@@ -7,9 +7,9 @@ Android app that detects connected gamepads and provides a virtual DualSense on/
 
 **Initial activation still requires a nearby Wi-Fi network. Fresh phone-only setup without nearby Wi-Fi remains unresolved.** This is not yet the full requested solution. Installing an APK cannot grant the required input permissions. See the [offline activation investigation](OFFLINE-ACTIVATION.md) for verified platform gates. No root, bootloader unlock, vendor exploit, SELinux change, Auto Blocker bypass, or automatic debugging re-enable is included.
 
-## Version 0.5 UI and reset
+## Current pairing and reset
 
-Pairing accepts the six-digit code through either the notification or the app’s **Enter pairing code** dialog. Keep Android’s pairing dialog visible in split screen for in-app entry. Both routes validate ASCII digits, preserve leading zeroes and use the same private service; codes are not persisted.
+Version 0.5.1 uses notification-only pairing. Keep Android's pairing dialog open, expand the Controller Bridge notification, select Enter pairing code, enter all six digits and tap Send. Codes are not persisted. In-app entry was removed after the user reported unreliable behavior; the earlier split-screen experiment is historical, not supported setup guidance.
 
 The security footer disappears after activation when both debugging flags are off. This does not detect Samsung Auto Blocker; users must still restore it.
 

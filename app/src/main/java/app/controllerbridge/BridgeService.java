@@ -19,7 +19,7 @@ public final class BridgeService extends Service {
     public static volatile boolean active, busy, pairing;
     public static volatile String message="Set up phone access to begin", ownDescriptor="";
     private static final String CHANNEL="controller";
-    public static final String CODE_KEY="code";
+    private static final String CODE_KEY="code";
     private final ExecutorService worker=Executors.newSingleThreadExecutor();
     private final ScheduledExecutorService timers=Executors.newSingleThreadScheduledExecutor();
     private final Handler main=new Handler(Looper.getMainLooper());
@@ -161,14 +161,14 @@ public final class BridgeService extends Service {
     }
     static String pairingCode(Intent intent)throws IOException {
         Bundle reply=RemoteInput.getResultsFromIntent(intent);
-        String code=reply==null?intent.getStringExtra(CODE_KEY):String.valueOf(reply.getCharSequence(CODE_KEY,""));
+        String code=reply==null?null:String.valueOf(reply.getCharSequence(CODE_KEY,""));
         if(code==null||!code.matches("[0-9]{6}"))throw new IOException("Enter the six digits shown by Android.");
         return code;
     }
     private void startPairing() {
         if(pairing)return;
         pairing=true; pairingPort=-1;
-        message="Open Wireless debugging → Pair device with pairing code. Enter it here in split screen, or use the notification.";
+        message="Open Wireless debugging → Pair device with pairing code. Keep that dialog open. Enter the code through the Controller Bridge notification.";
         mdns=new AdbMdns(this,AdbMdns.SERVICE_TYPE_TLS_PAIRING,(host,port)->{
             if(host!=null&&port>0)main.post(()->{if(pairing){pairingPort=port;foreground("Pairing found. Enter Android’s 6-digit code.",true);}});
         });

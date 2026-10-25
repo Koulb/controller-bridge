@@ -9,6 +9,11 @@ import java.lang.reflect.*;
 public final class ActivationTest extends Instrumentation {
     private Bundle arguments;
     @Override public void onCreate(Bundle args){super.onCreate(args);arguments=args;start();}
+    private static Intent notificationCode(String value){
+        Intent intent=new Intent();Bundle reply=new Bundle();reply.putCharSequence("code",value);
+        android.app.RemoteInput.addResultsToIntent(new android.app.RemoteInput[]{new android.app.RemoteInput.Builder("code").setLabel("Code").build()},intent,reply);
+        return intent;
+    }
     private static void require(boolean yes,String message){if(!yes)throw new AssertionError(message);}
     private static Context failWrites(Context target,boolean allowDelete){
         SharedPreferences real=target.getSharedPreferences("activation",0);
@@ -46,12 +51,13 @@ public final class ActivationTest extends Instrumentation {
             }
             Method code=c.getClassLoader().loadClass("app.controllerbridge.BridgeService").getDeclaredMethod("pairingCode",Intent.class);
             code.setAccessible(true);
-            require("001234".equals(code.invoke(null,new Intent().putExtra("code","001234"))),"In-app code lost leading zeroes");
-            Intent notification=new Intent().putExtra("code","999999");Bundle reply=new Bundle();reply.putCharSequence("code","023456");
-            android.app.RemoteInput.addResultsToIntent(new android.app.RemoteInput[]{new android.app.RemoteInput.Builder("code").setLabel("Code").build()},notification,reply);
-            require("023456".equals(code.invoke(null,notification)),"Notification reply not preferred");
+            try{code.invoke(null,new Intent().putExtra("code","123456"));throw new AssertionError("Removed in-app code route still accepted");}
+            catch(InvocationTargetException expected){require(expected.getCause() instanceof java.io.IOException,"Wrong direct-code rejection");}
+            Intent notification=notificationCode("001234");
+            notification.putExtra("code","999999");
+            require("001234".equals(code.invoke(null,notification)),"Notification lost leading zeroes or used direct extras");
             for(String invalid:new String[]{null,"","12345","1234567","abcdef","１２３４５６","123 45"}){
-                try{code.invoke(null,new Intent().putExtra("code",invalid));throw new AssertionError("Invalid pairing code accepted");}
+                try{code.invoke(null,notificationCode(invalid));throw new AssertionError("Invalid pairing code accepted");}
                 catch(InvocationTargetException expected){require(expected.getCause() instanceof java.io.IOException,"Wrong pairing rejection");}
             }
             Class<?> type=c.getClassLoader().loadClass("app.controllerbridge.ActivationRequest");
@@ -73,7 +79,7 @@ public final class ActivationTest extends Instrumentation {
             require(granted[0],"Valid request rejected");
             try{consume.invoke(null,c,token,(Runnable)()->{});throw new AssertionError("Token reused");}
             catch(InvocationTargetException expected){require(expected.getCause() instanceof SecurityException,"Wrong replay rejection");}
-            result.putString("result","PASS: both pairing entry paths and invalid codes; permission cleanup; cancelled request rejection; write failure reporting; deletion fallback; single-use consumption");
+            result.putString("result","PASS: notification codes; removed in-app route rejected; invalid codes; permission cleanup; cancelled request rejection; write failure reporting; deletion fallback; single-use consumption");
             finish(-1,result);
         }catch(Throwable error){result.putString("result","FAIL: "+error);android.util.Log.e("ControllerActivationTest","Failure",error);finish(0,result);}
     }

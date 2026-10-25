@@ -4,19 +4,14 @@ Virtual DualSense toggle for games such as Call of Duty: Mobile. **Experimental 
 
 ## Install and set up
 
-1. Download **[ControllerBridge-0.5.0.apk](https://github.com/Koulb/controller-bridge/releases/tag/v0.5.0)** while signed into GitHub with access to this private repo.
+1. Download **[ControllerBridge-0.5.1.apk](https://github.com/Koulb/controller-bridge/releases/tag/v0.5.1)** while signed into GitHub with access to this private repo.
 2. Temporarily turn Samsung **Auto Blocker OFF**, install the APK, and connect to trusted Wi-Fi.
 3. Enable **Developer options** (About phone → Software information → tap Build number seven times), then **Wireless debugging**. Allow the current network; leave “Always allow” unchecked.
 4. App → **Set up phone → Pair phone**. Allow notifications if asked, then tap again. In Android, select **Pair device with pairing code**.
-5. Keep Android’s code dialog open. Enter its code through the app’s notification, or use **Enter pairing code** inside the app in **split screen**.
+5. **Enter the code through the notification only:** keep Android’s code dialog open, pull down notifications, expand **Controller Bridge**, tap **Enter pairing code**, type the six digits and tap the **Send**.
 6. App restarts and shows **Ready**. Verify **USB debugging OFF**, **Wireless debugging OFF**, and restore **Auto Blocker ON**. Revoke your browser/file manager’s APK-install permission. Wi-Fi can now be turned off.
 
-For split screen on Samsung: Recent apps → tap Controller Bridge’s icon → **Open in split screen view** → select **Developer options/Settings**. Scroll the app pane to **Enter pairing code**; keep Android’s code dialog visible beside it.
-
-<p>
-  <img src="docs/images/setup.png" alt="Controller Bridge setup instructions" width="280">
-  <img src="docs/images/pairing.png" alt="In-app pairing-code entry" width="280">
-</p>
+<img src="docs/images/notification-pairing.png" alt="Enter the six-digit code in Controller Bridge’s notification, then tap Send. Other information is blurred." width="320">
 
 ## Play and test
 
@@ -30,4 +25,4 @@ Install only a build you trust: activation retains powerful input permissions un
 
 ## Tested with
 
-Samsung **Galaxy S26 Ultra (SM-S948U1)** · **Android 17 / API 37** · **8BitDo Ultimate MG** · **Call of Duty: Mobile**. Fresh-install gameplay confirmed on 0.4; 0.5 pairing/reset/self-tests passed, gameplay retest pending.
+Samsung **Galaxy S26 Ultra (SM-S948U1)** · **Android 17 / API 37** · **8BitDo Ultimate MG** · **Call of Duty: Mobile**. Fresh-install gameplay confirmed on 0.4; 0.5.1 notification pairing/self-test results are recorded in [validation](docs/VALIDATION-0.5.1.md).

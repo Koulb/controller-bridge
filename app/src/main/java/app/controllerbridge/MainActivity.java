@@ -18,7 +18,7 @@ public final class MainActivity extends Activity {
     private static final int BACKGROUND=0xff0c121e, MUTED=0xff99a9bf, ACCENT=0xff65e3c4;
     private final Handler handler=new Handler(Looper.getMainLooper());
     private TextView names,state,access,notice;
-    private Button toggle,setupButton,enterCodeButton,resetButton;
+    private Button toggle,setupButton,resetButton;
     private ControllerVisual visual;
     private boolean foreground;
     private boolean virtualConnected;
@@ -67,7 +67,6 @@ public final class MainActivity extends Activity {
             else send(BridgeService.ON,0);
         });
         setupButton=button("Set up phone");setupButton.setOnClickListener(v->setup());root.addView(setupButton,new LinearLayout.LayoutParams(-1,dp(50)));
-        enterCodeButton=button("Enter pairing code");enterCodeButton.setOnClickListener(v->pairingCode());root.addView(enterCodeButton,new LinearLayout.LayoutParams(-1,dp(50)));
         notice=text("",13,MUTED);notice.setGravity(Gravity.CENTER);notice.setOnClickListener(v->securitySettings());root.addView(notice);
         resetButton=button("Reset setup");resetButton.setBackgroundTintList(android.content.res.ColorStateList.valueOf(0xffa72e3b));
         resetButton.setOnClickListener(v->confirmReset());
@@ -89,7 +88,6 @@ public final class MainActivity extends Activity {
         toggle.setEnabled(Build.VERSION.SDK_INT>=37&&(working||active||!pads.isEmpty()));
         toggle.setAlpha(toggle.isEnabled()?1f:.4f);
         setupButton.setVisibility(!ready&&!sony&&!working&&Build.VERSION.SDK_INT>=37?View.VISIBLE:View.GONE);
-        enterCodeButton.setVisibility(BridgeService.pairing&&!BridgeService.busy?View.VISIBLE:View.GONE);
         boolean savedSetup=new java.io.File(getNoBackupFilesDir(),"adb-key.pk8").exists();
         resetButton.setVisibility(ready||savedSetup?View.VISIBLE:View.GONE);resetButton.setEnabled(!working);
         access.setText(Build.VERSION.SDK_INT<37?"Requires Android 17 or later":working?"Connecting…":sony?"Ready to play":active?"Fully close and reopen your game":ready?"Ready · Wi-Fi not needed":"Setup needed · Connect to Wi-Fi");
@@ -157,10 +155,9 @@ public final class MainActivity extends Activity {
     private void setup(){
         if(Build.VERSION.SDK_INT<37){new AlertDialog.Builder(this).setMessage("This version requires Android 17 or later.").setPositiveButton("Done",null).show();return;}
         LinearLayout panel=new LinearLayout(this);panel.setOrientation(1);panel.setPadding(dp(24),dp(8),dp(24),dp(8));
-        panel.addView(text("1. Connect to trusted Wi-Fi. Temporarily turn Auto Blocker off.\n\n2. Enable Developer options → Wireless debugging.\n\n3. Tap Pair phone. In Android, choose Pair device with pairing code. Enter its code through the notification, or use Enter pairing code below with Settings open in split screen.",15,0xffd7e1ef));
+        panel.addView(text("1. Connect to trusted Wi-Fi. Temporarily turn Auto Blocker off.\n\n2. Enable Developer options → Wireless debugging.\n\n3. Tap Pair phone. In Android, choose Pair device with pairing code. Keep Android’s code dialog open. Pull down notifications, expand Controller Bridge, tap Enter pairing code, type the six digits and tap Send.",15,0xffd7e1ef));
         Button settings=button("Wireless debugging settings");settings.setOnClickListener(v->wirelessSettings());panel.addView(settings);
         Button pair=button("Pair phone");pair.setOnClickListener(v->{if(send(BridgeService.PAIR,0))wirelessSettings();});panel.addView(pair);
-        Button code=button("Enter pairing code");code.setOnClickListener(v->{if(send(BridgeService.PAIR,0))pairingCode();});panel.addView(code);
         panel.addView(text("Already paired? Enable Wireless debugging, then activate.",14,MUTED));
         Button activate=button("Activate paired phone");activate.setOnClickListener(v->send(BridgeService.CONNECT,0));panel.addView(activate);
         panel.addView(text("The app restarts during activation. Afterward, turn both debugging modes off and restore Auto Blocker. Wi-Fi is then optional.",14,MUTED));
@@ -168,23 +165,6 @@ public final class MainActivity extends Activity {
         Button fallback=button("Connection troubleshooting");fallback.setOnClickListener(v->manualConnection());panel.addView(fallback);
         ScrollView scroll=new ScrollView(this);scroll.addView(panel);
         new AlertDialog.Builder(this).setTitle("Set up phone").setView(scroll).setPositiveButton("Done",null).show();
-    }
-    private void pairingCode(){
-        EditText code=new EditText(this);code.setInputType(InputType.TYPE_CLASS_NUMBER);code.setHint("6-digit pairing code");
-        code.setFilters(new android.text.InputFilter[]{new android.text.InputFilter.LengthFilter(6)});
-        code.setSaveEnabled(false);code.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO);
-        code.setImeOptions(android.view.inputmethod.EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING);
-        code.setPadding(dp(24),dp(12),dp(24),dp(12));
-        AlertDialog dialog=new AlertDialog.Builder(this).setTitle("Enter pairing code")
-                .setMessage("Keep Android’s pairing dialog open in split screen. Enter its six-digit code here. You can also use the notification.")
-                .setView(code).setNegativeButton("Cancel",null).setPositiveButton("Pair",null).create();
-        dialog.setOnDismissListener(d->code.setText(""));
-        dialog.setOnShowListener(d->dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v->{
-            String value=code.getText().toString();
-            if(!value.matches("[0-9]{6}")){code.setError("Enter all six digits shown by Android.");return;}
-            if(BridgeService.busy){code.setError("Wait for the current connection attempt, or cancel it first.");return;}
-            if(send(new Intent(this,BridgeService.class).setAction(BridgeService.CODE).putExtra(BridgeService.CODE_KEY,value)))dialog.dismiss();
-        }));dialog.show();
     }
     private void confirmReset(){
         AlertDialog dialog=new AlertDialog.Builder(this).setTitle("Reset setup?")

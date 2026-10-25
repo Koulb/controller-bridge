@@ -34,7 +34,7 @@ Initial activation needs trusted Wi-Fi and temporary Android Wireless debugging.
 
 These permissions remain powerful. A compromised build could inject other input; this is not identical to stock security. No analytics or remote service. No root, bootloader unlock, security bypass, automatic debugging re-enable or permanent privileged helper. The private service is unexported and the fixed controller interface is process-local with an exact UID check.
 
-Pairing keys live in app-private no-backup storage. In-app and notification code entry share validation, preserve leading zeroes and reject malformed/non-ASCII input. Keep Android's pairing dialog visible in split screen for in-app entry. Settings must launch in a separate task, otherwise Samsung cannot place it beside Controller Bridge.
+Pairing keys live in app-private no-backup storage. Version 0.5.1 accepts pairing codes only through the notification's RemoteInput. Preserve leading zeroes and reject malformed/non-ASCII codes and plain Intent extras. Keep Android's pairing dialog open while using the notification. The user reported in-app entry unreliable; it has been removed, including its screenshot/instructions. Do not reintroduce it without a new request.
 
 The toggle preserves activation. Stop phone access ends input access while keeping pairing. Reset setup confirms, then calls ActivityManager.clearApplicationUserData(): Android stops the app, removes its virtual controller and delegated access, erases key/certificate/settings/nonces, and revokes runtime permissions. Android may retain the old public-key pairing entry; the app no longer has its private key. Reset does not change system debugging or Auto Blocker switches. Show reset when saved pairing exists, even if active access has ended.
 
@@ -50,9 +50,10 @@ README images originate from real phone screenshots. Blur sensitive status-bar d
 
 Test phone: Samsung Galaxy S26 Ultra SM-S948U1, Android 17/API 37, security patch 2026-10-05. Physical gamepad: 8BitDo Ultimate MG. Physical DualSense off.
 
-User confirmed fresh 0.4 download/install/setup and CoD gameplay. Version 0.5 changes UI, pairing entry and reset; backend controller creation remains unchanged. Fresh 0.5 in-app pairing in Samsung split screen, reset deletion/revocation, independent Sony registry checks and built-in self-test passed. Fresh release download/gameplay remains a user acceptance test. Do not conflate earlier gameplay confirmation with a new run.
+User confirmed fresh 0.4 download/install/setup and CoD gameplay. Version 0.5 changes UI, pairing entry and reset; backend controller creation remains unchanged. Fresh 0.5 in-app pairing in Samsung split screen, reset deletion/revocation, independent Sony registry checks and built-in self-test passed. User subsequently reported in-app entry failed, so version 0.5.1 removes it and uses notification-only pairing. Fresh 0.5.1 notification pairing, built-in self-test and independent controller registry checks passed, including Wi-Fi-off operation. Fresh release download/gameplay remains a user acceptance test. Do not conflate earlier gameplay confirmation with a new run.
 
-- Current checks: [0.5 validation](docs/VALIDATION-0.5.md)
+- Current checks: [0.5.1 validation](docs/VALIDATION-0.5.1.md)
+- Prior in-app pairing experiment: [0.5 validation](docs/VALIDATION-0.5.md) (user reported in-app entry failed; removed in 0.5.1)
 - Backend/build detail: [technical notes](docs/TECHNICAL.md)
 - Earlier evidence: [0.4](docs/VALIDATION-0.4.md), [0.3](docs/VALIDATION-0.3.md)
 - Prior platform investigation: [offline activation](docs/OFFLINE-ACTIVATION.md)
