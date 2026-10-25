@@ -4,7 +4,7 @@
 
 Native Java Android app. Adds a virtual Sony DualSense identity; the real controller supplies gameplay inputs. It does not rename Bluetooth devices, forward input, or implement Sony haptics. Detection is capability-based, not an 8BitDo allowlist. Compatibility remains device/game-specific.
 
-Keep README limited to installation, setup, play/test, recovery, essential security information and tested hardware. Put developer context here; detailed investigation history stays under docs/.
+Keep README limited to installation, setup screenshots and tested hardware. Do not add a Play and test section or game names to Tested with. Keep gameplay/test guidance, recovery and developer context here; detailed investigation history stays under docs/.
 
 ## Build and tests
 

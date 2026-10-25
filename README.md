@@ -11,18 +11,10 @@ Virtual DualSense toggle for games such as Call of Duty: Mobile. **Experimental 
 5. **Enter the code through the notification only:** keep Android’s code dialog open, pull down notifications, expand **Controller Bridge**, tap **Enter pairing code**, type the six digits and tap **Send**.
 6. App restarts and shows **Ready**. Verify **USB debugging OFF**, **Wireless debugging OFF**, and restore **Auto Blocker ON**. Revoke your browser/file manager’s APK-install permission. Wi-Fi can now be turned off.
 
-<img src="docs/images/notification-pairing.png" alt="Enter the six-digit code in Controller Bridge’s notification, then tap Send. Other information is blurred." width="320">
-
-## Play and test
-
-Connect your gamepad, keep physical DualSense off, then tap **Turn on DualSense**. Run **⋮ → Run self-test**. Fully close and reopen CoD, then test movement, aiming and buttons in training.
-
-**After reboot or app termination:** repeat Wi-Fi/debugging preparation, choose **Activate paired phone**, then restore protection as in step 6.
-
-**Reset setup:** red button → confirm. Deletes the app’s pairing key/settings, revokes access and closes the app. Reopen and pair again. Cancel changes nothing.
-
-Install only a build you trust: activation retains powerful input permissions until the app stops. Other hardware/games are not guaranteed. [Maintainer details](AGENTS.md).
+| Android settings | Keep this dialog open | Enter code in notification |
+| --- | --- | --- |
+| <img src="docs/images/wireless-settings.png" alt="Wireless debugging: select Pair device with pairing code" width="240"> | <img src="docs/images/android-pairing.png" alt="Android pairing dialog; personal details and code blurred" width="240"> | <img src="docs/images/notification-pairing.png" alt="Enter six-digit code in Controller Bridge’s notification, then tap Send; other information blurred" width="240"> |
 
 ## Tested with
 
-Samsung **Galaxy S26 Ultra (SM-S948U1)** · **Android 17 / API 37** · **8BitDo Ultimate MG** · **Call of Duty: Mobile**. Fresh-install gameplay confirmed on 0.4; 0.5.1 notification pairing/self-test results are recorded in [validation](docs/VALIDATION-0.5.1.md).
+Samsung **Galaxy S26 Ultra (SM-S948U1)** · **Android 17 / API 37** · **8BitDo Ultimate MG**.
