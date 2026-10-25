@@ -18,7 +18,8 @@ public final class BridgeService extends Service {
         PAIR="app.controllerbridge.PAIR", CODE="app.controllerbridge.CODE", CONNECT="app.controllerbridge.CONNECT", EXIT="app.controllerbridge.EXIT", TEST="app.controllerbridge.TEST";
     public static volatile boolean active, busy, pairing;
     public static volatile String message="Set up phone access to begin", ownDescriptor="";
-    private static final String CHANNEL="controller", CODE_KEY="code";
+    private static final String CHANNEL="controller";
+    public static final String CODE_KEY="code";
     private final ExecutorService worker=Executors.newSingleThreadExecutor();
     private final ScheduledExecutorService timers=Executors.newSingleThreadScheduledExecutor();
     private final Handler main=new Handler(Looper.getMainLooper());
@@ -115,7 +116,6 @@ public final class BridgeService extends Service {
         busy=true;
         final long token;
         synchronized(lock){token=++generation;if(ON.equals(action))latestOnGeneration=token;}
-        final Bundle reply=RemoteInput.getResultsFromIntent(i);
         Runnable timeout=()->{if(valid(token)&&busy)cancel("Phone access timed out. Try pairing or connecting again.");};
         main.postDelayed(timeout,50000);
         FutureTask<Void> task=new FutureTask<>(()->{
@@ -128,8 +128,7 @@ public final class BridgeService extends Service {
                 } else {
                 PhoneAdb adb=manager;if(adb==null){adb=PhoneAdb.create(this);manager=adb;}check(token);
                 if(CODE.equals(action)) {
-                    String code=reply==null?"":String.valueOf(reply.getCharSequence(CODE_KEY,""));
-                    if(!code.matches("[0-9]{6}"))throw new IOException("Enter the six digits shown by Android.");
+                    String code=pairingCode(i);
                     if(pairingPort<1)throw new IOException("Open Wireless debugging → Pair device with pairing code first.");
                     adb.pairLocal(pairingPort,code,()->valid(token)); check(token);
                     main.post(()->{if(valid(token))stopPairing();});
@@ -160,10 +159,16 @@ public final class BridgeService extends Service {
         operation=task;worker.execute(task);
         return START_NOT_STICKY;
     }
+    static String pairingCode(Intent intent)throws IOException {
+        Bundle reply=RemoteInput.getResultsFromIntent(intent);
+        String code=reply==null?intent.getStringExtra(CODE_KEY):String.valueOf(reply.getCharSequence(CODE_KEY,""));
+        if(code==null||!code.matches("[0-9]{6}"))throw new IOException("Enter the six digits shown by Android.");
+        return code;
+    }
     private void startPairing() {
         if(pairing)return;
         pairing=true; pairingPort=-1;
-        message="Open Wireless debugging → Pair device with pairing code. Enter code in this app’s notification.";
+        message="Open Wireless debugging → Pair device with pairing code. Enter it here in split screen, or use the notification.";
         mdns=new AdbMdns(this,AdbMdns.SERVICE_TYPE_TLS_PAIRING,(host,port)->{
             if(host!=null&&port>0)main.post(()->{if(pairing){pairingPort=port;foreground("Pairing found. Enter Android’s 6-digit code.",true);}});
         });

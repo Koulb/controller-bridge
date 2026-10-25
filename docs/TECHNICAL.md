@@ -7,7 +7,15 @@ Android app that detects connected gamepads and provides a virtual DualSense on/
 
 **Initial activation still requires a nearby Wi-Fi network. Fresh phone-only setup without nearby Wi-Fi remains unresolved.** This is not yet the full requested solution. Installing an APK cannot grant the required input permissions. See the [offline activation investigation](OFFLINE-ACTIVATION.md) for verified platform gates. No root, bootloader unlock, vendor exploit, SELinux change, Auto Blocker bypass, or automatic debugging re-enable is included.
 
-## Experimental setup
+## Version 0.5 UI and reset
+
+Pairing accepts the six-digit code through either the notification or the app’s **Enter pairing code** dialog. Keep Android’s pairing dialog visible in split screen for in-app entry. Both routes validate ASCII digits, preserve leading zeroes and use the same private service; codes are not persisted.
+
+The security footer disappears after activation when both debugging flags are off. This does not detect Samsung Auto Blocker; users must still restore it.
+
+**Reset setup** uses Android’s [`ActivityManager.clearApplicationUserData()`](https://developer.android.com/reference/android/app/ActivityManager#clearApplicationUserData()) after confirmation. Android stops the app, revokes runtime permissions and erases private data, including the non-backed-up ADB key/certificate and activation nonce. The same-process input session ends and its virtual device disappears. A new key must be paired before activation. The old public-key entry can remain in Android’s paired-device list; the app no longer has its private key. Reset does not change the system’s debugging or Auto Blocker switches.
+
+## Experimental setup (backend history)
 
 1. Build and install the APK. This backend requires Android 17 or later and compatible firmware; only the connected Samsung S26 Ultra has been tested.
 2. Connect a Bluetooth or USB gamepad. The app shows Android's controller name. A real DualSense or DualSense Edge displays **DualSense connected**.

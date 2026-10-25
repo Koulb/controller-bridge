@@ -15,8 +15,8 @@ Date: 2026-10-25. Device: Samsung Galaxy S26 Ultra (SM-S948U1), Android 17/API 3
 
 ## Limits
 
-- Fresh installation from the private GitHub release, fresh pairing after uninstall, and user gameplay confirmation on 0.4 remain the next acceptance test.
-- Gameplay and protected-state operation were confirmed by the user on the unchanged 0.3 backend. Do not present those as a new gameplay test of 0.4.
+- Follow-up: user confirmed fresh download/install, setup and gameplay from the 0.4 release all work.
+- Protected-state operation was confirmed on the unchanged 0.3 backend; the subsequent 0.4 distribution test was user-reported.
 - Only the phone/controller combination above is validated. Reboot or app termination requires another Wi-Fi activation. Offline activation without an access point is not offered.
 - The Android permissions retained during the activated session remain broader than gamepad creation; interface simplification does not change this security tradeoff.
 
