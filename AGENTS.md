@@ -42,7 +42,7 @@ After reboot, force-stop, update or app termination, Wi-Fi activation is needed 
 
 ## Distribution and screenshots
 
-Private repository: https://github.com/Koulb/controller-bridge. Publish APK, matching source archive and SHA256SUMS together. Source packaging uses an explicit allowlist. Include AGENTS.md and redacted docs/images/; exclude signing keys, raw evidence, SDK/vendor/build caches, phone identifiers and pairing secrets. Verify archive contents and release asset hashes.
+Public repository: https://github.com/Koulb/controller-bridge. Publish APK, matching source archive and SHA256SUMS together. Source packaging uses an explicit allowlist. Include AGENTS.md and redacted docs/images/; exclude signing keys, raw evidence, SDK/vendor/build caches, phone identifiers and pairing secrets. Verify archive contents and release asset hashes.
 
 README images originate from real phone screenshots. Blur sensitive status-bar details before publishing. Keep raw captures in ignored evidence/ only. Never include live pairing codes, network addresses, personal device names or account details in documentation images. Inspect edited images for privacy and unchanged instructions.
 
