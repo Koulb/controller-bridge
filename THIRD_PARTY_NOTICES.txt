@@ -1,0 +1,36 @@
+Controller Bridge includes the following open-source software.
+
+LibADB Android 3.1.1 — Muntashir Al-Islam and contributors
+https://github.com/MuntashirAkon/libadb-android/tree/3.1.1
+GPL-3.0-or-later OR Apache-2.0, with BSD-3-Clause and MIT components.
+Chosen license: Apache-2.0, retaining the other component notices.
+BoundedPairing.java adapts PairingConnectionCtx: socket deadlines, cancellation,
+null-safe cleanup. Original source included in third-party-src.
+
+spake2-java / spake2-android 2.2.1 — Muntashir Al-Islam and contributors
+https://github.com/MuntashirAkon/spake2-java/tree/2.2.1
+LGPL-3.0. Includes native spake2-c at commit
+0d15933e5ba3e662cb01245a7ac0dc9fca3eac31.
+Source archives for both projects accompany the app source. Restore spake2-c
+under android/src/main/cpp/spake2-c to rebuild the upstream library. Preserve
+native source license notices. Modification and reverse engineering for debugging
+modifications to this library are permitted. See README for replacement and
+installation instructions. GPL-3.0 and LGPL-3.0 texts included.
+
+Conscrypt Android 2.5.3 — The Conscrypt Authors and contributors
+https://github.com/google/conscrypt/tree/2.5.3
+Apache-2.0 and bundled notices, including BoringSSL/OpenSSL notices.
+See licenses/Conscrypt.txt (the complete upstream license file).
+
+Bouncy Castle bcprov, bcpkix, bcutil 1.81 — The Legion of the Bouncy Castle
+https://github.com/bcgit/bc-java/tree/r1rv81
+Bouncy Castle license (MIT-style); licenses/Bouncy-Castle.txt.
+
+AndroidX Annotation JVM 1.9.1 — The Android Open Source Project
+https://android.googlesource.com/platform/frameworks/support/+/androidx-annotation-release/annotation/
+Apache-2.0.
+
+Android shell protocol framing follows Android Open Source Project's
+packages/modules/adb/shell_protocol.h (Apache-2.0). Framing implementation here
+is independently written. Android SDK/platform tools are build prerequisites,
+not bundled into the release APK or source bundle.

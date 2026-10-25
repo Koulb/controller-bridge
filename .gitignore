@@ -1,0 +1,15 @@
+/build/
+/vendor/
+/tools/
+/evidence/
+/test-classes/
+/signing.p12
+*.jks
+*.keystore
+*.pk8
+*.der
+__pycache__/
+.DS_Store
+/app/src/main/assets/licenses/
+/app/src/main/assets/THIRD_PARTY_NOTICES.txt
+/release/

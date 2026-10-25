@@ -1,0 +1,5 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="app.controllerbridge.tests">
+ <uses-sdk android:minSdkVersion="30" android:targetSdkVersion="36"/>
+ <application android:label="Controller Bridge Tests" android:allowBackup="false"/>
+ <instrumentation android:name=".ActivationTest" android:targetPackage="app.controllerbridge" android:functionalTest="true"/>
+</manifest>
